@@ -1,18 +1,22 @@
 sys:
   register-url: http://127.0.0.1:8761/eureka/,http://127.0.0.1:8762/eureka/
-  config-url: http://saas-config
+  local-enable: true
 eureka:
   client:
     serviceUrl:
       defaultZone: ${sys.register-url}
-    enabled: true
+    enabled:  ${sys.local-enable}
 logging:
   file: e://log/saas-${spring.profiles.active}/${spring.application.name}.log
 spring:
   cloud:
     config:
-      name: ${spring.application.name}
-      profile: ${spring.profiles.active}
-      label: master
-      uri: ${saas.server-center.url}/config/
-      enabled: true
+      discovery:
+        enabled:  true
+        serviceId: saas-config
+      enabled: ${sys.local-enable}
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
